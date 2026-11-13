@@ -10,6 +10,7 @@ client = OpenAI(
 
 history = [{"role": "system", "content": "你是我的学习搭子，回答简短，术语必须用生活比喻解释。"}]
 
+total = 0
 while True:
     q = input("我：")
     if q in ("exit", "q"):
@@ -21,4 +22,6 @@ while True:
     print("AI：", answer)
 
     history.append({"role": "assistant", "content": answer})  # 2. 记下它的回答
-len(history)
+
+    total += resp.usage.total_tokens
+    print(f"[本轮 {resp.usage.total_tokens} tokens｜累计 {total}]")

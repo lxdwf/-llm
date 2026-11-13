@@ -1,6 +1,8 @@
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
 
+load_dotenv()
 client = OpenAI(
     api_key=os.environ["DEEPSEEK_API_KEY"],   # 从环境变量读，绝不写死
     base_url="https://api.deepseek.com",     # 换地址：指向 DeepSeek

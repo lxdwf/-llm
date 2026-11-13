@@ -3,13 +3,14 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
+
 load_dotenv()
 client = OpenAI(
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com"
 )
 
-jd = """长沙，本科，熟悉 Python，
+jd = """AI应用开发实习生，长沙，本科，熟悉 Python，
 了解 LangChain/Dify，有 RAG 项目经验优先，薪资 150-200/天。"""
 
 system = """你是信息抽取器。用户给一段招聘 JD，你只输出 json，不要解释。
