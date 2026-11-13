@@ -1,0 +1,3 @@
+# DeepSeek 用的是 OpenAI 兼容接口，所以装 OpenAI 官方库即可，不需要专门的 DeepSeek SDK
+openai
+python-dotenv
