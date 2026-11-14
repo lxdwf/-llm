@@ -123,11 +123,22 @@ for chunk in stream:
         print(text, end="", flush=True)
 ```
 
-### 坑 5 · JSON 模式只保证「是合法 JSON」，不保证「是你要的字段」
+### 坑 5 · JSON 模式只保证「格式合法」，不保证「长得像你要的」
 
 **现象**：`json.loads` 成功了，但 `data["我缺"]` 报 `KeyError`。
-**原因**：`response_format={"type": "json_object"}` 只保证输出能被解析，**字段名它自己定**。
-实测：提示词只写「抽取信息输出JSON。」时，模型给出的是 `title` / `location` / `salary` 这种英文 key。
+**原因**：`response_format={"type": "json_object"}` 的作用范围比想象的小得多。
+
+| 它**保证** | 它**不保证** |
+| --- | --- |
+| 输出是一个 JSON 对象（不是散文、不带 ` ```json ` 代码块） | **字段名** —— 会自己发明 `title` / `location` / `salary` |
+| 正常情况下能被 `json.loads` 解析 | **结构** —— 该给列表的地方可能给一个字符串 |
+| | **内容真实** —— 照样能编造没写的薪资 |
+| | **一定合法** —— 被 `max_tokens` 截断时是半截 JSON，照样崩 |
+
+最后一条是我实测出来的，见 `w2v02.py` 的测试 2：把 `max_tokens` 调到 30，`finish_reason` 变成 `length`，拿到的就是一个半截 JSON。
+
+> **所以「开了 JSON 模式」≠「不会解析失败」。** 这就是为什么重试必须分三层：请求层（网络/鉴权）、空内容层（返回一堆空格）、解析层（JSON 半截或格式错）。
+
 **解决**：在提示词的「输出格式」段**写死 key 名并给样例**。这就是「prompt 的输出格式段 = 代码接口定义」。
 
 ### 坑 6 · `FileNotFoundError`：代码写的目录名和磁盘上不一样

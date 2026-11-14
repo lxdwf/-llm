@@ -14,6 +14,6 @@ response = client.chat.completions.create(
 )
 print(type(response))
 print(response.choices[0].message)      # 看它长什么样
-print(response.choices[0].message.role) # 是 assistant 还是 user？
+print(response.choices[0].message.content) 
 print(response.usage)
 print(response.choices[0].finish_reason)
