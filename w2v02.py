@@ -48,7 +48,7 @@ def extract_json(client, jd, system, retries=3):
             print(f"[第{i+1}次] 请求失败：{type(e).__name__}: {e}")
             # 第一次失败不等待，从第二次开始指数退避
             if i > 0:
-                time.sleep(2 ** i)
+              time.sleep(2 ** i + random.uniform(0, 1)) 
             continue
 
         # 2. 空内容兜底（服务端清洗后只剩空格）
